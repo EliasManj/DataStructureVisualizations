@@ -18,8 +18,7 @@ class AnimationHelper{
         });
     }
 
-    animateDeletion(key) {
-        var part = this.findNode(key);
+    animateDeletion(part) {
         if (!(part instanceof go.Node)) return; // only animate Nodes
         var animation = new go.Animation();
         var deletePart = part.copy();

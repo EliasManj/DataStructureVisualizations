@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Minimal GoJS Sample</title>
+    <meta name="description"
+        content="An almost minimal diagram using a very simple node template and the default link template." />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Copyright 1998-2019 by Northwoods Software Corporation. -->
+
+    <script src="go-debug.js"></script>
+
+    <script id="code">
+        function changeColor() {
+            window.animateTrigger1();
+        }
+        function findNode(key) {
+            var it = myDiagram.nodes;
+            while (it.next()) {
+                var item = it.value;
+                if (item.key == key) {
+                    return item;
+                }
+            }
+            return null;
+        }
+        function remove() {
+            var node = findNode("foo");
+            animateDeletion(node);
+            myDiagram.model.removeNodeData(myDiagram.model.findNodeDataForKey("foo"));
+        }
+        function treeLoadAnimation() {
+            myDiagram.startTransaction("animate link");
+
+        }
+        function init() {
+            //debugger;
+            var nodeDataArray = [
+                { key: "foo" }
+            ];
+            var $ = go.GraphObject.make;
+            myDiagram =
+                $(go.Diagram, "myDiagramDiv",
+                    {
+                        initialAutoScale: go.Diagram.UniformToFill,
+                        layout: $(go.TreeLayout,
+                            { angle: 90 })
+                    });
+            myDiagram.nodeTemplate =
+                $(go.Node, "Spot",
+                    { locationSpot: go.Spot.Center },
+                    new go.Binding("text", "text"),
+                    $(go.Shape, "Ellipse",
+                        {
+                            fill: "lightgray",
+                            stroke: 'black',
+                            strokeWidth: 3,
+                            desiredSize: new go.Size(40, 40)
+                        },
+                        new go.Binding("desiredSize", "size"),
+                        new go.Binding("fill", "fill"),
+                        new go.AnimationTrigger('fill'),
+                        new go.AnimationTrigger('stroke')
+                    ),
+                    $(go.TextBlock,
+                        new go.Binding("text", "key"))
+                );
+            myDiagram.addDiagramListener('SelectionDeleting', function (e) {
+                // the DiagramEvent.subject is the collection of Parts about to be deleted
+                e.subject.each(function (part) {
+                    animateDeletion(part);
+                });
+            });
+            myDiagram.model = new go.TreeModel(nodeDataArray);
+            window.animateTrigger1 = function () {
+                window.custom = true;
+                myDiagram.commit(function (diag) {
+                    var node = diag.nodes.first();
+                    node.elt(0).stroke = go.Brush.randomColor();
+                    node.elt(0).fill = go.Brush.randomColor();
+                });
+            }
+        }
+        function animateDeletion(part) {
+            console.log(typeof (part))
+            if (!(part instanceof go.Node)) return; // only animate Nodes
+            var animation = new go.Animation();
+            var deletePart = part.copy();
+            animation.add(deletePart, "scale", deletePart.scale, 0.01);
+            animation.add(deletePart, "angle", deletePart.angle, 360);
+            animation.addTemporaryPart(deletePart, myDiagram);
+            animation.start();
+        }
+    </script>
+</head>
+
+<body onload="init()">
+    <div id="myDiagramDiv" style="width:600px; height: 200px; border: 1px solid black;">
+    </div>
+    <button onclick="changeColor()">Change Color</button>
+    <button onclick="remove()">Delete</button>
+</body>
+
+</html>

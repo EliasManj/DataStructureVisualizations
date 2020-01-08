@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Minimal GoJS Sample</title>
+    <meta name="description"
+        content="An almost minimal diagram using a very simple node template and the default link template." />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Copyright 1998-2019 by Northwoods Software Corporation. -->
+
+    <script src="go-debug.js"></script>
+    <script src="linkedList.js"></script>
+    <script src="animationHelper.js"></script>
+
+    <script id="code">
+        var linkedList;
+        function init() {
+            var $ = go.GraphObject.make;
+            myDiagram = $(go.Diagram, "myDiagramDiv",
+                {
+                    initialAutoScale: go.Diagram.UniformToFill,
+                    layout: $(go.CircularLayout,
+                        {
+
+                        })
+                });
+            myDiagram.nodeTemplateMap.add("SimpleNode",
+                $(go.Node, "Spot",
+                    $(go.Panel, "Auto",
+                        $(go.Shape, "Ellipse",
+                            {
+                                fill: "lightgray",  // the initial value, but data binding may provide different value
+                                desiredSize: new go.Size(40, 40),
+                                stroke: 'black',
+                                strokeWidth: 3
+                            },
+                            new go.Binding("fill", "fill"),
+                            new go.AnimationTrigger('fill'),
+                            new go.AnimationTrigger('stroke')
+                            ),
+                        $(go.TextBlock,
+                            new go.Binding("text", "key")
+                        )
+                    ),
+                )
+            );
+            linkedList = new VisualLinkedList(myDiagram);
+        }
+        function insert() {
+            var to_insert = document.getElementById("insert-value").value;
+            linkedList.insert(to_insert);
+        }
+        function remove(){
+            var to_delete = document.getElementById("remove-value").value;
+            linkedList.remove(to_delete);
+        }
+    </script>
+</head>
+
+<body onload="init()">
+    <div id="myDiagramDiv" style="width:600px; height: 600px; border: 1px solid black;">
+    </div>
+    <button onclick="insert()">Insert</button>
+    <input id="insert-value" type="number">
+    <button onclick="remove()">Remove</button>
+    <input id="remove-value" type="number">
+</body>
+
+</html>

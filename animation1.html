@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Minimal GoJS Sample</title>
+    <meta name="description"
+        content="An almost minimal diagram using a very simple node template and the default link template." />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Copyright 1998-2019 by Northwoods Software Corporation. -->
+
+    <script src="go-debug.js"></script>
+
+    <script id="code">
+        var nodeDataArray;
+        function makeid(length) {
+            var result = '';
+            var characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for (var i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+        function addChild() {
+            var key = makeid(5);
+            myDiagram.model.addNodeData({ key: key, parent: nodeDataArray[nodeDataArray.length - 1].key });
+            var link = myDiagram.findLinkForKey(key);
+            animateLink(link);
+        }
+        function animatePos() {
+            var node = myDiagram.nodes.first();
+            animatePosition(node, 200, 200);
+        }
+
+        function animateLink(link) {
+            var animation = new go.Animation();
+            animation.duration = 1000;
+            animation.add(link, "scale", 0.001, 1);
+            animation.start();
+        }
+
+        function animatePosition(node, x, y) {
+            var shape = node.findObject("SHAPE"); // assumes this Node contains a go.Shape with .name = "SHAPE"
+            var animation = new go.Animation();
+            animation.duration = 1000;
+            // Animate this Node from its current position  to (400, 500)
+            animation.add(node, "position", node.position, new go.Point(x, y));
+            // Animate the fill of the Shape within the Node, from its current color to blue
+            // Both of these effects will animate simultaneously when start() is called:
+            animation.start();
+        }
+        function init() {
+            //debugger;
+            nodeDataArray = [
+                { key: "foo" }
+            ];
+            var $ = go.GraphObject.make;
+            myDiagram =
+                $(go.Diagram, "myDiagramDiv",
+                    {
+                        initialAutoScale: go.Diagram.UniformToFill,
+                        layout: $(go.TreeLayout,
+                            { angle: 90 })
+                    });
+            myDiagram.linkTemplate =
+                $(go.Link,
+                    $(go.Shape, { strokeWidth: 2, stroke: 'gray' }),
+                    $(go.Shape, { toArrow: "Standard", fill: 'gray', stroke: 'black' })
+                );
+            myDiagram.nodeTemplate =
+                $(go.Node, "Spot",
+                    { locationSpot: go.Spot.Center },
+                    new go.Binding("text", "text"),
+                    $(go.Shape, "Ellipse",
+                        {
+                            name: "SHAPE",
+                            fill: "lightgray",
+                            stroke: 'black',
+                            strokeWidth: 3,
+                            desiredSize: new go.Size(40, 40)
+                        },
+                        new go.Binding("desiredSize", "size"),
+                        new go.Binding("fill", "fill")
+                    ),
+                    $(go.TextBlock,
+                        new go.Binding("text", "key"))
+                );
+            myDiagram.addDiagramListener('SelectionDeleting', function (e) {
+                // the DiagramEvent.subject is the collection of Parts about to be deleted
+                e.subject.each(function (part) {
+                    animateDeletion(part);
+                });
+            });
+            go.AnimationManager.defineAnimationEffect('customScale', function (part, startValue, endObj, easing, currentTime, duration, animation) {
+                if (endObj.offsetTime < currentTime) {
+                    part.scale = easing(currentTime - endObj.offsetTime, startValue, (endObj.endValue - startValue), duration - endObj.offsetTime);
+                }
+                else {
+                    part.scale = startValue;
+                }
+            })
+            myDiagram.model = new go.TreeModel(nodeDataArray);
+        }
+    </script>
+</head>
+
+<body onload="init()">
+    <div id="myDiagramDiv" style="width:600px; height: 600px; border: 1px solid black;">
+    </div>
+    <button onclick="addChild()">Add child</button>
+    <button onclick="animatePos()">Animate Position</button>
+</body>
+
+</html>

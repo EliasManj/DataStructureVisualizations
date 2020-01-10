@@ -45,10 +45,10 @@ class VisualLinkedList {
         if (previousToCurrentLink != null && currentToNextLink != null)
             this.model.addLinkData({ from: previousToCurrentLink.from, to: currentToNextLink.to });
         //delete node
-        var toDelete = this.model.findNodeDataForKey(node.key);
+        var toDelete = this.diagram.findNodeForKey(node.key);
         //remove from diagram
-        this.animation.animateDeletion(node.key);
-        this.model.removeNodeData(toDelete);
+        this.animation.animateDeletion(toDelete);
+        this.model.removeNodeData(this.model.findNodeDataForKey(node.key));
     }
 
     removeLinkAndAnimate(node){

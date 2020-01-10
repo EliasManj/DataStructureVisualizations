@@ -6,15 +6,24 @@
   <script language="javascript" type="text/javascript" src = "main.js"></script>
   <script language="javascript" type="text/javascript" src = "node.js"></script>
   <script language="javascript" type="text/javascript" src = "linkedList.js"></script>
+  <script language="javascript" type="text/javascript" src = "algo-visualize/animationHelper.js"></script>
+  <script>
+  function insert() {
+            var to_insert = document.getElementById("insert-value").value;
+            mainInsert(to_insert);
+        }
+</script>
 </head>
 
 <body onload="init()">
   <div id="myDiagramDiv" 
     style=
     "width:1000px; 
-    height: 1000px; 
+    height: 500px; 
     border: 1px solid black">
   </div>
+  <button onclick="insert()">Insert</button>
+    <input id="insert-value" type="number">
 </body>
 
 </html>

@@ -1,8 +1,9 @@
 
 class LinkedList
 {
-    constructor(myDiagram)
+    constructor(myDiagram, linked_list_animation)
     {
+        this.animation = linked_list_animation;
         this.myDiagram = myDiagram;
         this.model = myDiagram.model;
         this.linkDataArray = myDiagram.model.linkDataArray;

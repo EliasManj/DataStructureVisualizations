@@ -76,6 +76,7 @@ class VisualLinkedList {
         if (this.nodeDataArray.length > 1) {
             var x = this.model.findNodeDataForKey(this.root.key);
             this.model.addLinkData({ from: node.key, to: x.key });
+            this.animation.animateLinkCreation(this.diagram.findLinkForKey(node.key));
         }
         this.root = node;
     }

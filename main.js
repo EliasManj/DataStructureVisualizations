@@ -1,14 +1,27 @@
 
+function mainInsert(){
+    debugger;
+    linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
+}
+
 
 function init()
 {
     var $ = go.GraphObject.make;
-    myDiagram = $(go.Diagram, "myDiagramDiv");
+    myDiagram = $(go.Diagram, "myDiagramDiv",
+    {
+        initialAutoScale: go.Diagram.UniformToFill,
+        layout: $(go.CircularLayout,
+            {
+
+            })
+    });
     var nodeDataArray = [];
     var linkDataArray = [];
+    var animationHelper = new AnimationHelper();
     myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
    
-    nodeList = new NodeList(myDiagram);
+    nodeList = new NodeList(myDiagram, animationHelper);
 
     
 
@@ -34,7 +47,6 @@ function init()
     linkedList.deleteConnection(nodeList.searchNode("9"));
     linkedList.deleteConnection(nodeList.searchNode("10"));
     linkedList.deleteConnection(nodeList.searchNode("10"));
-    linkedList.deleteConnection(nodeList.searchNode("21"));
     linkedList.deleteConnection(nodeList.searchNode("2"));
 
     nodeList.deleteNode("2");

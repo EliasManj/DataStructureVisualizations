@@ -36,8 +36,8 @@ class NodeList
         }
         this.myDiagram.model.addNodeData({key:this.counter, color:definedColor});
         this.keyList.push(this.counter.toString());
+        this.animation.animateNodeColor(this.myDiagram.findNodeForKey(this.counter), {fill: definedColor, stroke:'black'});
         this.counter++;
-        this.animation.animateNodeInsertion(this.myDiagram.findNodeForKey(this.counter));
         return key;
     }
     printKeyList()

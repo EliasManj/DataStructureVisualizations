@@ -5,29 +5,32 @@ class AnimationHelper{
         this.diagram = diagram;
     }
 
-    animateNodeInsertion(node){
-        if (!(node instanceof go.Node)) return; // only animate Nodes
-        node.elt(0).stroke = go.Brush.randomColor();
-        node.elt(0).fill = go.Brush.randomColor();
+    animateNode(node, props){
+        this.animateNodeColor(node, props);
+        this.animateNodePosition(node, props);
     }
 
-    randomStrokeAndFill(key){
-        this.diagram.commit(function (diag) {
-            var it = diag.nodes;
-            while (it.next()) {
-                var item = it.value;
-                if (item.key == key) {
-                    item.elt(0).stroke = go.Brush.randomColor();
-                    item.elt(0).fill = go.Brush.randomColor();
-                }
-            }
-        });
+    animateNodeColor(node, props){
+        if (!(node instanceof go.Node)) return; // only animate Nodes
+        var shape = node.findObject("shape");
+        var animation = new go.Animation();
+        animation.duration = 1000;
+        animation.add(shape, "fill", go.Brush.randomColor(), props.fill);
+        animation.add(shape, "stroke", go.Brush.randomColor(), props.stroke);
+        animation.start();
+    }
+
+    animateNodePosition(node, props){
+        if (!(node instanceof go.Node)) return; // only animate Nodes
+        var animation = new go.Animation();
+        animation.duration = 1000;
+        animation.add(node, "position", this.diagram.initialPosition, node.position);
+        animation.start();
     }
 
     animateLinkCreation(link) {
-        console.log(link);
         var animation = new go.Animation();
-        animation.duration = 1000;
+        animation.duration = 2000;
         animation.add(link, "scale", 0.001, 1);
         animation.start();
     }

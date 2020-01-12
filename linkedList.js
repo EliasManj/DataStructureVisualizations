@@ -22,7 +22,9 @@ class LinkedList
         }
         else
         {
-            this.model.addLinkData({from: this.lastNode, to:node});
+            var link = {from: this.lastNode, to:node, key: this.lastNode}
+            this.model.addLinkData(link);
+            this.animation.animateLinkCreation(this.myDiagram.findLinkForData(link));
             this.lastNode = node;
             this.linkedNodesCounter++;
         }

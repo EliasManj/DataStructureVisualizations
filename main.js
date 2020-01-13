@@ -44,9 +44,8 @@ function init() {
     linkedList = new LinkedList(myDiagram, animationHelper);
 
     for (let counter = 0; counter < 15; counter++)
-        nodeList.addLinearNodeRandomColor(true);
-    linkedList.linkList();
     linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
+
     linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
     linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
     linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
@@ -57,14 +56,7 @@ function init() {
     linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
 
 
-    linkedList.deleteConnection(nodeList.searchNode("4"));
-    linkedList.deleteConnection(nodeList.searchNode("11"));
-    linkedList.deleteConnection(nodeList.searchNode("9"));
-    linkedList.deleteConnection(nodeList.searchNode("10"));
-    linkedList.deleteConnection(nodeList.searchNode("10"));
-    linkedList.deleteConnection(nodeList.searchNode("2"));
-
-    nodeList.deleteNode("2");
+    linkedList.deleteConnection(nodeList.searchNode("20"));
     linkedList.printLinks();
 
     myDiagram.linkTemplate =

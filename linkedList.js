@@ -10,7 +10,8 @@ class LinkedList
         this.nodeDataArray = myDiagram.model.nodeDataArray;
         this.root = null;
         this.lastNode = null;
-        this.linkedNodesCounter = 1;
+        this.linkedNodesCounter = 0;
+        this.links = 0
     }
 
     insertNode(node)
@@ -19,6 +20,7 @@ class LinkedList
         {
             this.root = node;
             this.lastNode = node;
+            this.linkedNodesCounter++;
         }
         else
         {
@@ -27,6 +29,7 @@ class LinkedList
             this.animation.animateLinkCreation(this.myDiagram.findLinkForData(link));
             this.lastNode = node;
             this.linkedNodesCounter++;
+            this.links++;
         }
     } 
     linkList()
@@ -48,16 +51,23 @@ class LinkedList
     {
         if(nodeInfo.found)
         {
-            if(this.linkDataArray.length > 0)
+            if(this.linkDataArray.length == 0)
             {
                 if(this.linkDataArray[0].from == nodeInfo.node)
                 {
                     this.model.removeNodeData(this.nodeDataArray[0]);
+                    return;
                 }
             }
-            let value1 = this.linkDataArray.find(x=> x.to == nodeInfo.node);
-            //for(let counter = 0; counter < this.linkDataArray.length; counter++)
-//{
+            else if(this.links > 0 && this.linkDataArray[this.links-1].to == nodeInfo.node)
+            {
+                let link = this.linkDataArray.find(x=> x.to == nodeInfo.node);
+                this.model.removeLinkData(link);
+                this.model.removeNodeData(this.model.findNodeDataForKey(nodeInfo.node));
+            }
+            else
+            {
+                let value1 = this.linkDataArray.find(x=> x.to == nodeInfo.node);
                 if(value1.to == nodeInfo.node)
                 { 
                     let value = this.findLink(nodeInfo.node);
@@ -70,20 +80,14 @@ class LinkedList
                         this.model.removeNodeData(this.model.findNodeDataForKey(nodeInfo.node));
                     return;
                 }
-            //}
+            }
         }
     }
     findLink(to)
     {
-        for(let counter = 0; counter < this.linkDataArray.length; counter++)
-        {
-            console.log(this.linkDataArray[counter]);
-            if(this.linkDataArray[counter].from == to)
-            {
-                return this.linkDataArray[counter].to;
-            }
-        }
-        return null;
+        let link = this.linkDataArray.find(x => x.from == to);
+        if(link == null) return null;
+        return link.to;
     }
     addLink(from,to)
     {

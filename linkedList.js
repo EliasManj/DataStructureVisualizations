@@ -46,7 +46,19 @@ class LinkedList
             this.lastNode = nextNode.key;
             this.linkedNodesCounter++;
         }
-    }   
+    }  
+    emptyLinkList()
+    {
+        console.log(this.linkDataArray.length);
+        let linkDataArrayLength = this.linkDataArray.length;
+        for(let counter = 0; counter < linkDataArrayLength; counter++)
+        {
+            console.log(this.linkDataArray[0]);
+            this.model.removeLinkData(this.linkDataArray[0]);
+        }
+        if(this.nodeDataArray.length > 0)  this.linkedNodesCounter = 1;
+    } 
+    
     deleteConnection(nodeInfo)
     {
         if(nodeInfo.found)
@@ -98,6 +110,26 @@ class LinkedList
         for(let counter = 0; counter < this.linkDataArray.length; counter++)
         {
             console.log("Index: " + counter + " From: " + this.linkDataArray[counter].from + " To: " + this.linkDataArray[counter].to);
+        }
+    }
+    bubbleSort()
+    {
+        if(this.nodeDataArray.length > 1)
+        {
+            console.log(this.nodeDataArray.length);
+            for(let loops = 0; loops < this.nodeDataArray.length; loops++)
+            for(let counter = 0; counter < this.nodeDataArray.length-1; counter++)
+            {
+                if(Number(this.nodeDataArray[counter].key) > Number(this.nodeDataArray[counter+1].key))
+                {
+                    let temp = this.nodeDataArray[counter+1];
+                    this.nodeDataArray[counter+1] = this.nodeDataArray[counter];
+                    this.nodeDataArray[counter] = temp; 
+                    
+                    //Animate swapping here
+                }
+            }
+            console.log(this.nodeDataArray.length);
         }
     }
 }

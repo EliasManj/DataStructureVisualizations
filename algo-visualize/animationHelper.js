@@ -14,7 +14,7 @@ class AnimationHelper{
         if (!(node instanceof go.Node)) return; // only animate Nodes
         var shape = node.findObject("shape");
         var animation = new go.Animation();
-        animation.duration = 1000;
+        animation.duration = 100;
         animation.add(shape, "fill", go.Brush.randomColor(), props.fill);
         animation.add(shape, "stroke", go.Brush.randomColor(), props.stroke);
         animation.start();

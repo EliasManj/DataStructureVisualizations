@@ -23,6 +23,23 @@ class NodeList
         this.keyList.push(this.counter);
         this.counter++;
     }
+    addNodeRandomColor(keyName,randomFlag)
+    {
+        let definedColor = "rgb(50,100,50)";
+
+        if(randomFlag == true)
+        {
+            let red = Math.floor(Math.random() * 256);
+            let green = Math.floor(Math.random() * 256);
+            let blue = Math.floor(Math.random() * 256);
+            definedColor = "rgb(" + red + ',' + green + ',' + blue + ')';
+        }
+        this.myDiagram.model.addNodeData({key:keyName, color:definedColor});
+        this.keyList.push(keyName);
+        this.animation.animateNodeColor(this.myDiagram.findNodeForKey(keyName), {fill: definedColor, stroke:'black'});
+        this.counter++;
+        return keyName;
+    }
     addLinearNodeRandomColor(randomFlag)
     {
         let definedColor = "rgb(50,100,50)";

@@ -2,7 +2,13 @@
 function mainInsert() {
     linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
 }
-
+function mainBubbleSort()
+{
+    linkedList.emptyLinkList();
+    linkedList.bubbleSort();
+    linkedList.linkList();
+    //linkedList.printLinks();
+}
 
 function init() {
     var $ = go.GraphObject.make;
@@ -43,20 +49,16 @@ function init() {
 
     linkedList = new LinkedList(myDiagram, animationHelper);
 
-    for (let counter = 0; counter < 15; counter++)
-    linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
-
-    linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
-    linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
-    linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
-    linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
-
-
-    linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
-    linkedList.insertNode(nodeList.addLinearNodeRandomColor(true));
-
-
-    linkedList.deleteConnection(nodeList.searchNode("20"));
+    
+    linkedList.insertNode(nodeList.addNodeRandomColor("3", true));
+    linkedList.insertNode(nodeList.addNodeRandomColor("2", true));
+    linkedList.insertNode(nodeList.addNodeRandomColor("1", true));
+    linkedList.insertNode(nodeList.addNodeRandomColor("5", true));
+    linkedList.insertNode(nodeList.addNodeRandomColor("7", true));
+    linkedList.insertNode(nodeList.addNodeRandomColor("8", true));
+    linkedList.insertNode(nodeList.addNodeRandomColor("10", true));
+    linkedList.insertNode(nodeList.addNodeRandomColor("0", true));
+   //
     linkedList.printLinks();
 
     myDiagram.linkTemplate =

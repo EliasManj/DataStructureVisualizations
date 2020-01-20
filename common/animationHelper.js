@@ -20,11 +20,22 @@ class AnimationHelper{
         animation.start();
     }
 
+    animateNodeStroke(node, props){
+        if (!(node instanceof go.Node)) return; // only animate Nodes
+        var shape = node.findObject("shape");
+        var animation = new go.Animation();
+        animation.duration = 1000;
+        animation.add(shape, "stroke", go.Brush.randomColor(), props.stroke);
+        animation.start();
+    }
+
     animateNodePosition(node, props){
         if (!(node instanceof go.Node)) return; // only animate Nodes
         var animation = new go.Animation();
-        animation.duration = 1000;
-        animation.add(node, "position", this.diagram.initialPosition, node.position);
+        animation.duration = 5000;
+        animation.add(node, "position", this.diagram.layout.actualCenter, node.locationSpot);
+        //console.log(this.diagram.layout.actualCenter);
+        console.log(node.locationSpot);
         animation.start();
     }
 

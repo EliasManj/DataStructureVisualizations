@@ -19,11 +19,14 @@ class LinkedList
             this.root = node;
             this.lastNode = node;
             this.linkedNodesCounter++;
+            this.animation.animateNodeStroke(this.myDiagram.findNodeForKey(node), {stroke : "red"})
         } else {
             var link = {to : this.root, from: node, key: node};
             this.model.addLinkData(link);
             this.animation.animateLinkCreation(this.myDiagram.findLinkForData(link));
+            this.animation.animateNodeStroke(this.myDiagram.findNodeForKey(this.root), {stroke : "black"})
             this.root = node;
+            this.animation.animateNodeStroke(this.myDiagram.findNodeForKey(node), {stroke : "red"})
             this.linkedNodesCounter++;
             this.links++;
         }
@@ -63,11 +66,11 @@ class LinkedList
     }  
     emptyLinkList()
     {
-        console.log(this.linkDataArray.length);
+        //console.log(this.linkDataArray.length);
         let linkDataArrayLength = this.linkDataArray.length;
         for(let counter = 0; counter < linkDataArrayLength; counter++)
         {
-            console.log(this.linkDataArray[0]);
+            //console.log(this.linkDataArray[0]);
             this.model.removeLinkData(this.linkDataArray[0]);
         }
         if(this.nodeDataArray.length > 0)  this.linkedNodesCounter = 1;
@@ -123,7 +126,7 @@ class LinkedList
     {
         for(let counter = 0; counter < this.linkDataArray.length; counter++)
         {
-            console.log("Index: " + counter + " From: " + this.linkDataArray[counter].from + " To: " + this.linkDataArray[counter].to);
+            //console.log("Index: " + counter + " From: " + this.linkDataArray[counter].from + " To: " + this.linkDataArray[counter].to);
         }
     }
     bubbleSort()

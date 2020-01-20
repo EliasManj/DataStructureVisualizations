@@ -29,11 +29,13 @@ class NodeList {
             definedColor = "rgb(" + red + ',' + green + ',' + blue + ')';
         }
         this.myDiagram.model.addNodeData({ key: keyName, color: definedColor });
+        this.animation.animateNodePosition(this.myDiagram.findNodeForKey(keyName));
         this.keyList.push(keyName);
         this.animation.animateNodeColor(this.myDiagram.findNodeForKey(keyName), { fill: definedColor, stroke: 'black' });
         this.counter++;
         return keyName;
     }
+
     addLinearNodeRandomColor(randomFlag) {
         let definedColor = "rgb(50,100,50)";
         let key = this.randomValueNotInArray(1,100);
@@ -44,6 +46,7 @@ class NodeList {
             definedColor = "rgb(" + red + ',' + green + ',' + blue + ')';
         }
         this.myDiagram.model.addNodeData({ key: key, color: definedColor });
+        this.animation.animateNodePosition(this.myDiagram.findNodeForKey(key));
         this.keyList.push(key.toString());
         this.animation.animateNodeColor(this.myDiagram.findNodeForKey(key), { fill: definedColor, stroke: 'black' });
         this.counter++;

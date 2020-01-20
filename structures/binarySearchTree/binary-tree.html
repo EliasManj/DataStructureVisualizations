@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Minimal GoJS Sample</title>
+    <meta name="description"
+        content="An almost minimal diagram using a very simple node template and the default link template." />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Copyright 1998-2019 by Northwoods Software Corporation. -->
+
+    <script src="../../common/go-debug.js"></script>
+    <script src="binarySearchTree.js"></script>
+
+    <script id="code">
+        var tree;
+        function insertCallback() {
+            var to_insert = document.getElementById("insert-value").value;
+            if (!isNaN(to_insert)) {
+                tree.insert(parseInt(to_insert, 10));
+            }
+        }
+        function removeCallback() {
+            var to_remove = document.getElementById("remove-value").value;
+            if (!isNaN(to_remove)) {
+                tree.remove(parseInt(to_remove, 10));
+            }
+        }
+        function changeColorCallback() {
+            var colorValue = document.getElementById("change-color").value;
+            if (!isNaN(colorValue)) {
+                tree.changeColor(parseInt(colorValue, 10));
+            }
+        }
+        function init() {
+            var $ = go.GraphObject.make;
+            myDiagram =
+                $(go.Diagram, "myDiagramDiv",
+                    {
+                        initialAutoScale: go.Diagram.UniformToFill,
+                        layout: $(go.TreeLayout,
+                            {
+                                comparer: go.LayoutVertex.smartComparer,
+                                angle: 90,
+                                sorting: go.TreeLayout.SortingDescending,
+                                comparer: function (a, b) {
+                                    a = a.node; b = b.node;
+                                    if (a.data.key > b.data.key) return -1;
+                                    if (a.data.key < b.data.key) return 1;
+                                    return 0;
+                                }
+                            })
+                    });
+            myDiagram.nodeTemplate =
+                $(go.Node, "Spot",
+                    { locationSpot: go.Spot.Center },
+                    new go.Binding("text", "text"),  // for sorting
+                    $(go.Shape, "Ellipse",
+                        {
+                            fill: "lightgray",  // the initial value, but data binding may provide different value
+                            stroke: 'black',
+                            strokeWidth: 3,
+                            desiredSize: new go.Size(30, 30)
+                        },
+                        new go.Binding("desiredSize", "size"),
+                        new go.Binding("fill", "fill"),
+                        new go.AnimationTrigger('fill'),
+                        new go.AnimationTrigger('stroke')
+                    ),
+                    $(go.TextBlock,
+                        new go.Binding("text", "key"))
+                );
+            myDiagram.linkTemplate =
+                $(go.Link,
+                    {
+                        routing: go.Link.Orthogonal,
+                        selectable: false
+                    },
+                    $(go.Shape,
+                        { strokeWidth: 3, stroke: "#333" }));
+            myDiagram.addDiagramListener('SelectionDeleting', function (e) {
+                // the DiagramEvent.subject is the collection of Parts about to be deleted
+                e.subject.each(function (part) {
+                    if (!(part instanceof go.Node)) return; // only animate Nodes
+                    var animation = new go.Animation();
+                    var deletePart = part.copy();
+                    animation.add(deletePart, "scale", deletePart.scale, 0.01);
+                    animation.add(deletePart, "angle", deletePart.angle, 360);
+                    animation.addTemporaryPart(deletePart, myDiagram);
+                    animation.start();
+                });
+            });
+            tree = new BinarySearchTree(myDiagram);
+
+            tree.sample();
+        }
+    </script>
+</head>
+
+<body onload="init()">
+    <div id="myDiagramDiv" style="width:600px; height: 600px; border: 1px solid black;">
+    </div>
+    <button onclick="insertCallback()">Insert</button>
+    <input id="insert-value" type="number">
+    <button onclick="removeCallback()">Remove</button>
+    <input id="remove-value" type="number">
+    <button onclick="changeColorCallback()">Change Color</button>
+    <input id="change-color" type="number">
+</body>
+
+</html>
